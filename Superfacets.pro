@@ -1,7 +1,7 @@
 #-------------------------------------------------
 # 2014
-# Author:       Giulia Picciau - DIBRIS, Universit√† degli studi di Genova
-# Supervisors:  Leila De Floriani - DIBRIS, Universit√† degli studi di Genova
+# Author:       Giulia Picciau - DIBRIS, Universit√  degli studi di Genova
+# Supervisors:  Leila De Floriani - DIBRIS, Universit√  degli studi di Genova
 #               Patricio Simari - Department of Electrical Engineering and Computer Science, The Catholic University of America
 #
 # Submission to Pacific Graphics 2014
@@ -54,5 +54,5 @@ HEADERS += \
     dialogs.h \
     colormapper.h
 
-
-LIBS += -lGLU
+QMAKE_LIBDIR += "glu32_location"
+#LIBS += -lGLU
