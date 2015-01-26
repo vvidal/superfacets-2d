@@ -871,7 +871,7 @@ template<class V, class T> double Mesh<V,T>::FanArea(int v)
         t = this->getVertex(v).VTstar();
         if (t!=-1)
         {
-            //non calcolo l'area per vtstar perchè è già stato fatto prima
+            //non calcolo l'area per vtstar perchè è gi�  stato fatto prima
             t = NextTAroundV(t,v,CW);
         }
         if (t!=-1) do
@@ -913,7 +913,7 @@ template<class V, class T> double Mesh<V,T>::MArea(){
 
     double accumulator = 0.0;
 
-    for(unsigned int k = 0; k < this->getTopSimplexesNum(); k++){
+    for(unsigned int k = 0; k < static_cast<unsigned int>(this->getTopSimplexesNum()); k++){
         if(this->TArea(k)>=0)
             accumulator += this->TArea(k);
     }

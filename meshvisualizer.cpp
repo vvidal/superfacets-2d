@@ -1,8 +1,8 @@
 /*
  *
  *   2014
- *   Author:       Giulia Picciau - DIBRIS, Universit√† degli studi di Genova
- *   Supervisors:  Leila De Floriani - DIBRIS, Universit√† degli studi di Genova
+ *   Author:       Giulia Picciau - DIBRIS, Universit√  degli studi di Genova
+ *   Supervisors:  Leila De Floriani - DIBRIS, Universit√  degli studi di Genova
  *                 Patricio Simari - Department of Electrical Engineering and Computer Science, The Catholic University of America
  *
  *   Title:          Fast and scalable mesh superfacets
@@ -259,7 +259,7 @@ void MeshVisualizer::draw_mesh(){
     glRotatef(objRY, 0.0,1.0,0.0);
     glRotatef(objRX, 1.0,0.0,0.0);
 
-    for(faceind ii=0; ii<mesh.getTopSimplexesNum(); ii++){
+    for(faceind ii=0; ii<static_cast<faceind>(mesh.getTopSimplexesNum()); ii++){
 
         //Display the ii-th triangle
         Triangle T = mesh.getTopSimplex(ii);
@@ -331,7 +331,7 @@ void MeshVisualizer::paintGL(){
 
     /// Observer is here
     Vertex3D eye;
-    eye.setX(baryCenter.getX() + (maxCoord.getX() - baryCenter.getX())*3.5*sqrt(3));
+    eye.setX(baryCenter.getX() + (maxCoord.getX() - baryCenter.getX())*3.5*sqrt(static_cast<double>(3)));
     eye.setY(baryCenter.getY() + (maxCoord.getY() - baryCenter.getY())*3.5);
     eye.setZ(baryCenter.getZ() + (maxCoord.getZ() - baryCenter.getZ())*3.5);
 

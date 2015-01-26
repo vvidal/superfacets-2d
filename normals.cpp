@@ -1,8 +1,8 @@
 /*
  *
  *   2014
- *   Author:       Giulia Picciau - DIBRIS, UniversitÃ  degli studi di Genova
- *   Supervisors:  Leila De Floriani - DIBRIS, UniversitÃ  degli studi di Genova
+ *   Author:       Giulia Picciau - DIBRIS, UniversitÃ  degli studi di Genova
+ *   Supervisors:  Leila De Floriani - DIBRIS, UniversitÃ  degli studi di Genova
  *                 Patricio Simari - Department of Electrical Engineering and Computer Science, The Catholic University of America
  *
  *   Title:          Fast and scalable mesh superfacets
@@ -25,7 +25,7 @@ Normals::Normals()
  */
 Normals::Normals(Vertex3D a, Vertex3D b, Vertex3D c){
 
-    float vec1[3], vec2[3];
+    double vec1[3], vec2[3];
 
     vec1[0]=b.getX()-a.getX();
     vec1[1]=b.getY()-a.getY();
@@ -35,9 +35,9 @@ Normals::Normals(Vertex3D a, Vertex3D b, Vertex3D c){
     vec2[1]=c.getY()-a.getY();
     vec2[2]=c.getZ()-a.getZ();
 
-    this->nx=(vec1[1]*vec2[2])-(vec1[2]*vec2[1]);
-    this->ny=(vec1[2]*vec2[0])-(vec1[0]*vec2[2]);
-    this->nz=(vec1[0]*vec2[1])-(vec1[1]*vec2[0]);
+    this->nx=static_cast<float>((vec1[1]*vec2[2])-(vec1[2]*vec2[1]));
+    this->ny=static_cast<float>((vec1[2]*vec2[0])-(vec1[0]*vec2[2]));
+    this->nz=static_cast<float>((vec1[0]*vec2[1])-(vec1[1]*vec2[0]));
 
     //To have them in range [0,1]
     Normalize();

@@ -1,8 +1,8 @@
 /*
  *
  *   2014
- *   Author:       Giulia Picciau - DIBRIS, UniversitÃ  degli studi di Genova
- *   Supervisors:  Leila De Floriani - DIBRIS, UniversitÃ  degli studi di Genova
+ *   Author:       Giulia Picciau - DIBRIS, UniversitÃ  degli studi di Genova
+ *   Supervisors:  Leila De Floriani - DIBRIS, UniversitÃ  degli studi di Genova
  *                 Patricio Simari - Department of Electrical Engineering and Computer Science, The Catholic University of America
  *
  *   Title:          Fast and scalable mesh superfacets
@@ -25,10 +25,10 @@ ColorMapper::ColorMapper()
 ColorMapper::ColorMapper(int num){
     numColors=num;
 
-    saturation=1.0;
-    value=1.0;
+    saturation=1.0f;
+    value=1.0f;
 
-    stepHue=360.0/numColors;
+    stepHue=360.0f/numColors;
 }
 
 
@@ -39,8 +39,8 @@ ColorMapper::ColorMapper(int num){
 void ColorMapper::setRed(int region){
 
     hue=region*stepHue;
-    float hueSixty=hue/60.0;
-    float X =(1.0-fabs(fmod(hueSixty,2.0)-1.0));
+    float hueSixty=hue/60.0f;
+    float X =(1.0f-fabs(fmod(hueSixty,2.0f)-1.0f));
 
     if((hueSixty >=0.0 && hueSixty < 1.0) || (hueSixty >= 5.0 && hueSixty <6.0))
         red=saturation*value;
@@ -59,8 +59,8 @@ void ColorMapper::setRed(int region){
 void ColorMapper::setGreen(int region){
 
     hue=region*stepHue;
-    float hueSixty=hue/60.0;
-    float X=(saturation*value) * (1.0-fabs(fmod(hueSixty,2.0)-1.0));
+    float hueSixty=hue/60.0f;
+    float X=(saturation*value) * (1.0f-fabs(static_cast<float>(fmod(hueSixty,2.0f))-1.0f));
 
     if((hueSixty>=0.0 && hueSixty < 1.0) || (hueSixty >=3.0 && hueSixty < 4.0))
         green=X;
@@ -78,8 +78,8 @@ void ColorMapper::setGreen(int region){
 void ColorMapper::setBlue(int region){
 
     hue=region*stepHue;
-    float hueSixty=hue/60.0;
-    float X=(saturation*value) * (1.0-fabs(fmod(hueSixty,2.0)-1.0));
+    float hueSixty=hue/60.0f;
+    float X=(saturation*value) * (1.0f-fabs(static_cast<float>(fmod(hueSixty,2.0f))-1.0f));
 
     if(hueSixty >= 0.0 && hueSixty < 2.0)
         blue=0.0;

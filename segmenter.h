@@ -1,8 +1,8 @@
 /*
  *
  *   2014
- *   Author:       Giulia Picciau - DIBRIS, Universit√† degli studi di Genova
- *   Supervisors:  Leila De Floriani - DIBRIS, Universit√† degli studi di Genova
+ *   Author:       Giulia Picciau - DIBRIS, Universit√  degli studi di Genova
+ *   Supervisors:  Leila De Floriani - DIBRIS, Universit√  degli studi di Genova
  *                 Patricio Simari - Department of Electrical Engineering and Computer Science, The Catholic University of America
  *
  *   Title:          Fast and scalable mesh superfacets
@@ -16,7 +16,7 @@
 #include "normals.h"
 #include "Timer.h"
 #include "Reader.h"
-#include <tr1/unordered_map>
+#include <unordered_map>
 #include <queue>
 #include <unordered_set>
 #include <numeric>
@@ -26,7 +26,7 @@
 #include <fstream>
 
 
-namespace std { using namespace __gnu_cxx; }
+//namespace std { using namespace __gnu_cxx; }
 
 /// types for indices of triangles and for adjacencies between them
 typedef unsigned long int faceind;
@@ -298,19 +298,31 @@ private:
         //return (gridkey(x) << 16 | gridkey(y) << 8 | gridkey(z));
         if(x <= y && x <= z){
             if(y<=z)
-                return (gridkey(fabs(x)) << 16 | gridkey(fabs(y)) << 8 | gridkey(fabs(z)));
+                return (gridkey(fabs(static_cast<float>(x))) << 16 |
+                        gridkey(fabs(static_cast<float>(y))) << 8 |
+                        gridkey(fabs(static_cast<float>(z))));
             else
-                return (gridkey(fabs(x)) << 16 | gridkey(fabs(z)) << 8 | gridkey(fabs(y)));
+                return (gridkey(fabs(static_cast<float>(x))) << 16 |
+                        gridkey(fabs(static_cast<float>(z))) << 8 |
+                        gridkey(fabs(static_cast<float>(y))));
         }
         else{
             if(y <= z){
                 if(x <= z)
-                    return (gridkey(fabs(y)) << 16 | gridkey(fabs(x)) << 8 | gridkey(fabs(z)));
-                return (gridkey(fabs(y)) << 16 | gridkey(fabs(z)) << 8 | gridkey(fabs(x)));
+                    return (gridkey(fabs(static_cast<float>(y))) << 16 |
+                            gridkey(fabs(static_cast<float>(x))) << 8 |
+                            gridkey(fabs(static_cast<float>(z))));
+                return (gridkey(fabs(static_cast<float>(y))) << 16 |
+                        gridkey(fabs(static_cast<float>(z))) << 8 |
+                        gridkey(fabs(static_cast<float>(x))));
             }
             if(x <= y)
-                return (gridkey(fabs(z)) << 16 | gridkey(fabs(x)) << 8 | gridkey(fabs(y)));
-            return (gridkey(fabs(z)) << 16 | gridkey(fabs(y)) << 8 | gridkey(fabs(x)));
+                return (gridkey(fabs(static_cast<float>(z))) << 16 |
+                        gridkey(fabs(static_cast<float>(x))) << 8 |
+                        gridkey(fabs(static_cast<float>(y))));
+            return (gridkey(fabs(static_cast<float>(z))) << 16 |
+                    gridkey(fabs(static_cast<float>(y))) << 8 |
+                    gridkey(fabs(static_cast<float>(x))));
         }
 
     }

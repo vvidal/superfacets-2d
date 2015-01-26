@@ -15,10 +15,7 @@ Vertex3D::Vertex3D() {
  * @brief Vertex3D::Vertex3D class construction
  * @param orig
  */
-Vertex3D::Vertex3D(const Vertex3D& orig) : Vertex2D(orig) {
-    this->z=orig.z;
-    this->vertexSaliency=orig.saliency();
-}
+Vertex3D::Vertex3D(const Vertex3D& orig) : Vertex2D(orig), z(orig.z), vertexSaliency(orig.vertexSaliency) {}
 
 Vertex3D::~Vertex3D() {
 }

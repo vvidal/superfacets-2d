@@ -1,8 +1,8 @@
 /*
  *
  *   2014
- *   Author:       Giulia Picciau - DIBRIS, Universit√† degli studi di Genova
- *   Supervisors:  Leila De Floriani - DIBRIS, Universit√† degli studi di Genova
+ *   Author:       Giulia Picciau - DIBRIS, Universit√  degli studi di Genova
+ *   Supervisors:  Leila De Floriani - DIBRIS, Universit√  degli studi di Genova
  *                 Patricio Simari - Department of Electrical Engineering and Computer Science, The Catholic University of America
  *
  *   Title:          Fast and scalable mesh superfacets
@@ -12,7 +12,13 @@
  **/
 
 #include "segmenter.h"
-#include <stdio.h>
+#include <cstdio>
+#include <cmath>
+#include <ctime>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846264338327
+#endif
 
 /**
  * @brief Segmenter::Segmenter Constructor
@@ -71,7 +77,7 @@ void Segmenter::loadMesh(){
     norms.reserve(mesh.getTopSimplexesNum()*sizeof(Normals));
 
     //Normals
-    for(unsigned int a=0;a<mesh.getTopSimplexesNum();a++){
+    for(unsigned int a=0;a<static_cast<unsigned int>(mesh.getTopSimplexesNum());a++){
         Triangle T=mesh.getTopSimplex(a);
         Normals n=Normals(mesh.getVertex(T.TV(0)),mesh.getVertex(T.TV(1)),mesh.getVertex(T.TV(2)));
         norms.push_back(n);
@@ -297,7 +303,7 @@ std::tr1::unordered_map<edgekey, float> Segmenter::buildFaceDistances(){
 
     std::tr1::unordered_map<edgekey, float> FD;
 
-    for(unsigned int ii=0; ii<mesh.getTopSimplexesNum(); ii++){
+    for(unsigned int ii=0; ii<static_cast<unsigned int>(mesh.getTopSimplexesNum()); ii++){
 
         Triangle T = mesh.getTopSimplex(ii);
 
@@ -404,7 +410,7 @@ std::tr1::unordered_map<edgekey, float> Segmenter::buildAngleDistances(){
  */
 void Segmenter::buildGlobalDistances(){
 
-    for(unsigned int ii=0; ii<mesh.getTopSimplexesNum(); ii++){
+    for(unsigned int ii=0; ii<static_cast<unsigned int>(mesh.getTopSimplexesNum()); ii++){
 
         Triangle T = mesh.getTopSimplex(ii);
 
@@ -433,7 +439,7 @@ void Segmenter::expansionStep(){
     }
 
     // initialize clusterIndex expanded count
-    for(int i=0;i<facesCentroids.size();i++){
+    for(int i=0;i<static_cast<int>(facesCentroids.size());i++){
         clusterIndex[i]=-1; // -1 indicates unassigned face
         if(debugMode)
             expanded[i]=0;
@@ -485,7 +491,7 @@ void Segmenter::expansionStep(){
     //Repair step to re-assign faces whose index is -1
     while(!CheckClusterIndex()){
         int violator;
-        for(int vv=0;vv<facesCentroids.size();vv++){
+        for(int vv=0;vv<static_cast<int>(facesCentroids.size());vv++){
             if(/*expanded[vv]==0 || */clusterIndex[vv]<0){
                 violator=vv;
                 break;
@@ -493,7 +499,7 @@ void Segmenter::expansionStep(){
         }
         if(debugMode)
             cout<<"Violator "<<violator<<endl;
-        if(violator < facesCentroids.size())
+        if(violator < static_cast<int>(facesCentroids.size()))
             expandSeed(violator, NCluster++);
     }
     assert(CheckClusterIndex());
@@ -569,13 +575,13 @@ void Segmenter::placeSeeds(int index){
 
     int count=1;
     cout<<"Initializing..."<<endl;
-    while(regionCentroids.size()<NCluster){
+    while(static_cast<int>(regionCentroids.size())<NCluster){
         for(int iterFaces = 0; iterFaces < mesh.getTopSimplexesNum(); iterFaces++){
             distFromSeeds[iterFaces] = 0.0;
             if(regionCentroids.count(iterFaces)==0){
 
                 distFromSeeds[iterFaces] = facesCentroids.at(iterFaces).distance(facesCentroids.at(regionCentroids[0]));
-                for(int kk=1;kk<regionCentroids.size();kk++){
+                for(int kk=1;kk<static_cast<int>(regionCentroids.size());kk++){
 
                     if(distFromSeeds[iterFaces] > facesCentroids.at(iterFaces).distance(facesCentroids.at(regionCentroids[kk])))
                         distFromSeeds[iterFaces] = facesCentroids.at(iterFaces).distance(facesCentroids.at(regionCentroids[kk]));
@@ -639,19 +645,19 @@ void Segmenter::floodInitialization(int indexT){
     }
 
     // Initialize the distance graph to infinity for each triangle
-    for(unsigned int ii=0;ii<mesh.getTopSimplexesNum();ii++){
+    for(unsigned int ii=0;ii<static_cast<unsigned int>(mesh.getTopSimplexesNum());ii++){
         outputDijkstra[ii]=FLT_MAX;
     }
     outputDijkstra[indexT]=0; //Distance of the seed is 0
 
     // Initialize index of each face to -1 (unassigned)
-    for(unsigned int ii=0;ii<mesh.getTopSimplexesNum();ii++)
+    for(unsigned int ii=0;ii<static_cast<unsigned int>(mesh.getTopSimplexesNum());ii++)
         clusterIndex[ii]=-1;
 
     //Queue that stores all the triangles ordered with respect to their Euclidean distance from the seed
     //we had it to avoid having unassigned faces at the end of the initialization
     cout<<"Enter in the first loop"<<endl;
-    for(unsigned int a=0;a<mesh.getTopSimplexesNum();a++){
+    for(unsigned int a=0;a<static_cast<unsigned int>(mesh.getTopSimplexesNum());a++){
         pointDist pp;
         pp.indexP=a;
         if(a==indexT)
@@ -763,7 +769,13 @@ int minArrayIndex(float array[3]){
 bool Segmenter::updateCenters(){
 
     // differences in each region
-    int differences[NCluster];
+    int* differences = new (std::nothrow)int[NCluster] ;
+
+    if( differences==NULL )
+    {
+        std::cerr << "Memory allocation failed in Segmenter::updateCenters" << std::endl ;
+        exit(EXIT_FAILURE) ;
+    }
 
     for(int k=0;k<NCluster;k++)
         differences[k]=0;
@@ -771,7 +783,7 @@ bool Segmenter::updateCenters(){
     bool any_moves=false;
 
     // stores the old centroids
-    std::tr1::unordered_map<edgekey, int> olds;
+    std::unordered_map<edgekey, int> olds;
     if(debugMode)
         cout<<"Update"<<endl;
 
@@ -838,6 +850,9 @@ bool Segmenter::updateCenters(){
         cout<<"Regions "<<NCluster<<endl;
         cout<<"Differences in "<<ctrdiff<<" regions, total = "<<totaldiff<<endl;
     }
+
+    delete [] differences ;
+
     return any_moves;
 }
 
@@ -855,14 +870,17 @@ int Segmenter::writeSegmOnFile(string fileout){
         time_t now;
         time(&now);
 
-        struct tm * localT=localtime(&now);
+        struct tm localT;
+        localtime_s(&localT, &now);
 
         if(ofs.is_open()){
 
             //if we want an header (visualization purposes)
             if(putHeader){
+                char ch[256] ;
+                asctime_s(ch, &localT) ;
                 ofs << "#";
-                ofs << asctime(localT) << endl;
+                ofs << ch << endl;
                 ofs << "#mesh input=" << filename <<endl;
                 ofs << "#radius=" << maxD <<endl;
                 ofs << "#alpha=" << alpha <<endl;
@@ -872,7 +890,7 @@ int Segmenter::writeSegmOnFile(string fileout){
                 //running time of the segmentation
                 ofs << "#time: "<< millisecs << endl << endl;
             }
-            for(int a=0;a<facesCentroids.size();a++){
+            for(int a=0;a<static_cast<int>(facesCentroids.size());a++){
                 ofs << clusterIndex[a] << endl;
             }
 

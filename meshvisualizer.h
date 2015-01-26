@@ -1,8 +1,8 @@
 /*
  *
  *   2014
- *   Author:       Giulia Picciau - DIBRIS, Universit√† degli studi di Genova
- *   Supervisors:  Leila De Floriani - DIBRIS, Universit√† degli studi di Genova
+ *   Author:       Giulia Picciau - DIBRIS, Universit√  degli studi di Genova
+ *   Supervisors:  Leila De Floriani - DIBRIS, Universit√  degli studi di Genova
  *                 Patricio Simari - Department of Electrical Engineering and Computer Science, The Catholic University of America
  *
  *   Title:          Fast and scalable mesh superfacets
@@ -113,7 +113,7 @@ public:
         numClusters=0;
 
         //Find the number of clusters checking the highest cluster index value. Does like this because this number could change over the iterations
-        for(unsigned int a=0;a<mesh.getTopSimplexesNum();a++){
+        for(unsigned int a=0;a<static_cast<unsigned int>(mesh.getTopSimplexesNum());a++){
 
             if(numClusters < clusterIndex[a])
                 numClusters=clusterIndex[a];
